@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="Jogue Puzzle 3D grátis no navegador. Organize as peças numeradas de 1 a 8, treine o raciocínio lógico e tente bater seu recorde de movimentos e tempo.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://puzzle3d.netlify.app/">
+<meta name="google-site-verification" content="sRyMD2yIlmr78EOpPY5vJOJNnsVI9dtSx7IWX9MwG2Q" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7705166139361266" crossorigin="anonymous"></script>
+<title>Puzzle 3D — Quebra-cabeça online grátis</title>
+<style>
+:root{--bg:#101827;--panel:#1b2940;--text:#f4f7ff;--muted:#aebbd1;--accent:#6ee7f9}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at top,#243b58 0%,#101827 58%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;justify-content:center}
+.app{width:min(100%,520px);padding:18px 16px 26px;display:flex;flex-direction:column;gap:16px}
+header{text-align:center;padding-top:5px}
+.logo{display:inline-flex;gap:8px;align-items:center;font-weight:900;font-size:clamp(27px,8vw,38px);letter-spacing:1px}
+.logo .cube{display:inline-grid;place-items:center;width:40px;height:40px;background:linear-gradient(145deg,#67e8f9,#3b82f6);color:#102039;border-radius:12px;box-shadow:0 6px 0 #1e4b8c,0 12px 24px #0005;transform:rotate(-5deg)}
+.subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat{background:#1b2940d9;border:1px solid #ffffff12;border-radius:15px;padding:10px 6px;text-align:center;box-shadow:0 8px 18px #0002}
+.stat small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.stat strong{display:block;font-size:22px;margin-top:2px}
+.board-wrap{background:linear-gradient(145deg,#263953,#172438);border:1px solid #ffffff1a;border-radius:24px;padding:18px 12px 22px;box-shadow:0 18px 35px #0004,inset 0 1px #ffffff12}
+.board-title{display:flex;justify-content:space-between;align-items:center;padding:0 5px 18px;color:var(--muted);font-size:13px}
+.board-title strong{color:var(--text);font-size:14px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:370px;margin:auto;perspective:800px}
+.tile{aspect-ratio:1;border:0;border-radius:14px;position:relative;display:grid;place-items:center;color:#f8fbff;font-weight:900;font-size:clamp(29px,9vw,43px);text-shadow:0 2px 2px #0003;cursor:pointer;user-select:none;touch-action:manipulation;transform:translateY(-5px);box-shadow:0 7px 0 #0004,0 11px 15px #0003,inset 0 2px 0 #ffffff5c;transition:transform .12s,filter .12s}
+.tile:active{transform:translateY(0);box-shadow:0 2px 0 #0004,inset 0 2px 0 #ffffff44}
+.tile:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(145deg,#ffffff22,transparent 55%);pointer-events:none}
+.t1{background:linear-gradient(145deg,#4cc9f0,#2476cc)}.t2{background:linear-gradient(145deg,#a78bfa,#6d4acb)}.t3{background:linear-gradient(145deg,#fb7185,#d83255)}.t4{background:linear-gradient(145deg,#fbbf24,#d97706)}.t5{background:linear-gradient(145deg,#34d399,#059669)}.t6{background:linear-gradient(145deg,#60a5fa,#3459ca)}.t7{background:linear-gradient(145deg,#f472b6,#c02678)}.t8{background:linear-gradient(145deg,#a3e635,#65a30d)}
+.tile.empty{background:#101b2b;border:2px dashed #ffffff18;box-shadow:inset 0 5px 15px #0005;transform:none;cursor:default}
+.tile.empty:after{display:none}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button.action{border:1px solid #ffffff1c;border-radius:14px;padding:14px 10px;background:#263953;color:var(--text);font-weight:750;font-size:14px;cursor:pointer}
+button.primary{background:linear-gradient(135deg,#67e8f9,#3b82f6);color:#102039;border:0;box-shadow:0 5px 0 #20509a}
+button.action:active{transform:translateY(2px)}
+.tip{color:var(--muted);font-size:13px;line-height:1.5;text-align:center;margin:0}
+.message{display:none;text-align:center;background:#123b37;border:1px solid #34d39966;border-radius:16px;padding:13px;font-weight:800;color:#a7f3d0}
+.message.show{display:block}
+footer{text-align:center;color:#7f91ad;font-size:11px;padding-top:2px}
+@media(min-width:430px){.app{padding-top:24px}.board-wrap{padding:22px 18px 26px}.board{gap:12px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header>
+  <div class="logo"><span class="cube">◆</span><span>PUZZLE <span style="color:#67e8f9">3D</span></span></div>
+  <div class="subtitle">Organize os blocos. Desafie sua mente.</div>
+</header>
+<section class="stats" aria-label="Estatísticas">
+  <div class="stat"><small>Movimentos</small><strong id="moves">0</strong></div>
+  <div class="stat"><small>Tempo</small><strong id="time">00:00</strong></div>
+  <div class="stat"><small>Recorde</small><strong id="best">—</strong></div>
+</section>
+<section class="board-wrap">
+  <div class="board-title"><strong>FASE 1 · INICIANTE</strong><span>Monte de 1 a 8 ↗</span></div>
+  <div class="board" id="board" aria-label="Tabuleiro de quebra-cabeça"></div>
+</section>
+<div class="message" id="win">🏆 Muito bem! Você resolveu o Puzzle 3D!</div>
+<section class="actions">
+  <button class="action primary" id="shuffle">⤨ Embaralhar</button>
+  <button class="action" id="undo">↶ Desfazer</button>
+  <button class="action" id="sound" style="grid-column:1 / -1">🔊 Som ligado</button>
+</section>
+<p class="tip">Toque em uma peça ao lado do espaço vazio para movê-la.<br>Você também pode deslizar a peça na direção do espaço vazio.</p>
+<section class="board-wrap" aria-labelledby="sobre-titulo" style="text-align:left;line-height:1.7">
+  <h2 id="sobre-titulo" style="margin:0 0 8px;font-size:22px">Como jogar Puzzle 3D</h2>
+  <p>O Puzzle 3D é um quebra-cabeça numérico gratuito para jogar diretamente no navegador do celular ou computador. O objetivo é organizar as oito peças numeradas em ordem crescente, deixando o espaço vazio no último quadrado.</p>
+  <h3>Regras do jogo</h3>
+  <ul>
+    <li>Toque em uma peça que esteja ao lado do espaço vazio para movê-la.</li>
+    <li>Você só pode mover uma peça por vez e não pode pular por cima de outra peça.</li>
+    <li>Use o contador de movimentos e o cronômetro para acompanhar sua partida.</li>
+    <li>Use “Desfazer” para voltar uma jogada e “Embaralhar” para começar um novo desafio.</li>
+    <li>Você pode ligar ou desligar os efeitos sonoros pelo botão de som.</li>
+  </ul>
+  <h3>Dicas para resolver o quebra-cabeça</h3>
+  <p>Comece organizando as peças da primeira linha. Depois, tente posicionar as peças restantes sem desfazer o que já organizou. Planeje alguns movimentos antes de tocar e evite mover uma peça sem pensar em como ela ajudará a aproximar o tabuleiro da ordem final.</p>
+  <h3>O que este jogo ajuda a praticar?</h3>
+  <p>Quebra-cabeças de deslizar peças podem servir como passatempo e desafio de lógica, planejamento e atenção. Você pode repetir as partidas para tentar resolver o tabuleiro com menos movimentos ou em menos tempo. Os resultados dependem da prática e da estratégia de cada jogador.</p>
+  <h3>Jogue no celular ou computador</h3>
+  <p>Não é necessário instalar um aplicativo. Abra esta página em um navegador atualizado e use os botões na tela. O jogo foi desenvolvido para controles por toque e também funciona com cliques.</p>
+  <p style="font-size:13px;color:var(--muted)">O Puzzle 3D é um projeto independente de entretenimento e não é afiliado a outros jogos ou marcas de quebra-cabeça.</p>
+</section>
+<section class="board-wrap" style="text-align:left;line-height:1.7">
+  <h2 style="margin-top:0;font-size:20px">Privacidade e contato</h2>
+  <p>O jogo usa o armazenamento local do navegador para guardar seu recorde neste dispositivo. Esse dado permanece no seu navegador e pode ser apagado ao limpar os dados do site.</p>
+  <p>Este site pode usar serviços de terceiros, incluindo Google AdSense, para veicular anúncios, caso o site seja aprovado e os anúncios sejam ativados. Esses serviços podem utilizar cookies ou tecnologias semelhantes conforme suas próprias políticas e as configurações aplicáveis.</p>
+  <p>Leia a <a href="privacidade.html" style="color:#67e8f9">Política de Privacidade</a> para mais informações. Para dúvidas sobre o site, entre em contato pelo e-mail de contato informado pelo responsável pelo projeto.</p>
+</section>
+<footer>PUZZLE 3D · jogo de quebra-cabeça online · <a href="privacidade.html" style="color:#aebbd1">Política de Privacidade</a></footer>
+</main>
+<script>
+(() => {
+ const boardEl=document.getElementById('board'), movesEl=document.getElementById('moves'), timeEl=document.getElementById('time'), bestEl=document.getElementById('best'), winEl=document.getElementById('win');
+ let tiles=[1,2,3,4,5,6,7,8,0], moves=0, seconds=0, timer=null, started=false, history=[];
+ let soundOn=true, audioCtx=null;
+ function tone(freq, duration=0.09, type='sine', volume=0.045, delay=0){
+   if(!soundOn)return;
+   try{
+     audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+     if(audioCtx.state==='suspended')audioCtx.resume();
+     const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+     osc.type=type;osc.frequency.setValueAtTime(freq,audioCtx.currentTime+delay);
+     gain.gain.setValueAtTime(0.0001,audioCtx.currentTime+delay);
+     gain.gain.exponentialRampToValueAtTime(volume,audioCtx.currentTime+delay+0.012);
+     gain.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+delay+duration);
+     osc.connect(gain);gain.connect(audioCtx.destination);
+     osc.start(audioCtx.currentTime+delay);osc.stop(audioCtx.currentTime+delay+duration+0.02);
+   }catch(e){}
+ }
+ function playMove(){tone(520,0.07,'triangle',0.04)}
+ function playShuffle(){tone(360,0.07,'sine',0.035);tone(440,0.08,'sine',0.035,0.08)}
+ function playWin(){[523,659,784,1047].forEach((f,i)=>tone(f,0.22,'sine',0.06,i*0.13))}
+ let best=Number(localStorage.getItem('puzzle3d-best')||0);
+ bestEl.textContent=best?best:'—';
+ const solved=[1,2,3,4,5,6,7,8,0];
+ function neighbors(i){const out=[];if(i%3>0)out.push(i-1);if(i%3<2)out.push(i+1);if(i>2)out.push(i-3);if(i<6)out.push(i+3);return out;}
+ function render(){
+   boardEl.innerHTML='';
+   tiles.forEach((v,i)=>{
+     const b=document.createElement('button');
+     b.className='tile '+(v===0?'empty':'t'+v);
+     b.setAttribute('aria-label',v===0?'Espaço vazio':'Peça '+v);
+     b.textContent=v===0?'':v;
+     if(v!==0)b.addEventListener('click',()=>move(i));
+     b.addEventListener('touchstart',e=>{b.dataset.x=e.touches[0].clientX;b.dataset.y=e.touches[0].clientY},{passive:true});
+     b.addEventListener('touchend',e=>{
+       if(v===0)return;const dx=e.changedTouches[0].clientX-Number(b.dataset.x||0),dy=e.changedTouches[0].clientY-Number(b.dataset.y||0);
+       if(Math.max(Math.abs(dx),Math.abs(dy))>24){const empty=tiles.indexOf(0);let target=-1;if(Math.abs(dx)>Math.abs(dy))target=empty+(dx>0?-1:1);else target=empty+(dy>0?-3:3);if(target===i)move(i);}
+     },{passive:true});
+     boardEl.appendChild(b);
+   });
+   movesEl.textContent=moves;
+ }
+ function startTimer(){if(timer)return;started=true;timer=setInterval(()=>{seconds++;timeEl.textContent=fmt(seconds)},1000);}
+ function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+ function move(i){
+   const e=tiles.indexOf(0);if(!neighbors(e).includes(i))return;
+   startTimer();history.push(tiles.slice());[tiles[e],tiles[i]]=[tiles[i],tiles[e]];moves++;playMove();render();
+   if(tiles.every((v,j)=>v===solved[j]))win();
+ }
+ function win(){clearInterval(timer);timer=null;winEl.classList.add('show');playWin();if(!best||moves<best){best=moves;localStorage.setItem('puzzle3d-best',best);bestEl.textContent=best}}
+ function shuffle(){
+   clearInterval(timer);timer=null;seconds=0;moves=0;started=false;timeEl.textContent='00:00';history=[];winEl.classList.remove('show');tiles=solved.slice();let prev=-1;
+   for(let n=0;n<160;n++){const e=tiles.indexOf(0),opts=neighbors(e).filter(i=>i!==prev);const pick=opts[Math.floor(Math.random()*opts.length)];prev=e;[tiles[e],tiles[pick]]=[tiles[pick],tiles[e]]}
+   if(tiles.every((v,j)=>v===solved[j]))shuffle();render();playShuffle();
+ }
+ document.getElementById('shuffle').addEventListener('click',shuffle);
+ document.getElementById('undo').addEventListener('click',()=>{if(!history.length)return;tiles=history.pop();moves=Math.max(0,moves-1);movesEl.textContent=moves;winEl.classList.remove('show');playMove();render()});
+ document.getElementById('sound').addEventListener('click',()=>{
+   soundOn=!soundOn;
+   document.getElementById('sound').textContent=soundOn?'🔊 Som ligado':'🔇 Som desligado';
+   if(soundOn)tone(660,0.1,'sine',0.05);
+ });
+ render();shuffle();
+})();
+</script>
+</body>
+</html>
